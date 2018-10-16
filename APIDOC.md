@@ -149,3 +149,37 @@ La notificación de dicha recomendación se realiza a traves de:
     error: "Not found"
 }
 ```
+
+### SendEmail (async) -> MailNotifications Microservice
+
+*Route*
+
+    GET /v1/recomm/random/mail
+    GET /v1/recomm/all/mail
+---
+*Response*
+```js
+{
+    message: "E-mail siendo procesado"
+}
+```
+---
+*Error Response*
+
+    HTTP/1.1 400 Bad Request
+```js
+{
+    error:{
+        message: "{Motivo del error}",
+        path: "{Nombre de la propiedad}"
+    }
+}
+```
+---
+    HTTP/1.1 500 Internal Server Error
+```js
+{
+    error: "Couldnt send email"
+}
+```
+

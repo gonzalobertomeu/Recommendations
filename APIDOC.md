@@ -2,150 +2,97 @@
 
 ## Propósito del microservicio
 
-La finalidad de este microservicio es obtener datos proporcionados por *Orders* y generar recomendaciones de artículos que a los compradores probablemente les interese comprar.
+La finalidad de este microservicio es obtener datos de otros microservicios [order,cart] como visitas a un artículo, agregarlo a un carrito, y comprar un artículo. Cada uno de estos eventos da cierta puntuación a ese artículo para ese usuario.
 
-En un principio, las recomendaciones estan dadas por grupos de artículos **[colección]**, definidos por el usuario *administrador*, lo cual, _Recommendations_ determina si el articulo comprado por un usuario (detallado en un *Order*), esta dentro de una **colección**, y expone un articulo aleatorio de esa **colección** o todos los artículos dentro de esta. 
+Catalogar y gestionar esta “tabla de puntuaciones de usuario” es la función de este microservicio.
+Luego consulta a Catalogo, con el artículo mejor puntuado, y este retorna un arreglo de artículos recomendados (o asociados).
+Controla la “precisión” de la recomendación que se va a realizar. La precisión se calcula según esta formula:
 
-La notificación de dicha recomendación se realiza a traves de:
-+ Devolución de un json con articulo/s recomendados **(sync)**
-+ Enviar un e-mail al usuario, utilizando el microservicio *Mail notifications* **(async)**
+precisión = 1 / { promedio - ( puntajeMasAlto / promedio ) }
+
+Mientras más cerca de 1, más precisa es la recomendación que se realizará.
+
+Puede obtener en cualquier momento artículos recomendados. Si el cliente confirma una compra [order_placed], el microservicio enviara un mail con los artículos recomendados automáticamente, y establecerá el puntaje de ese artículo en 0. Si se vuelve a buscar ese mismo artículo, su puntaje aumentará y al cabo de un tiempo puede ser nuevamente recomendado.
 
 ## Casos de uso
 
-+ Es el encargado de organizar las colecciones de artículos, y devolver recomendaciones.
-+ El usuario administrador es quién define las colecciones
-+ Recibe arreglos de artículos para definir una colección
-+ Se escucha el topic = "order_placed". Se determina el articulo del *order* para saber a que colección pertenece
-+ Se puede retornar uno o todos los artículos de la colección menos el artículo con la cual se determinó la colección.
-+ También pueden obtenerse las recomendaciones, pasando el artículo al microservicio.
-+ Devuelve lo/s artículo/s por JSON
-+ Envía un mail con lo/s artículo/s mediante *Mail notifications*
+Escucha a la cola “article-commend”. Los mensajes recibidos tienen un id de articulo y una puntuación según de que evento surge el “elogio” a ese articulo (Buscarlo, agregarlo al carrito o comprarlo).
+Recommendations se encarga de mantener un ranking de artículos por cada usuario.
+Se puede solicitar recomendaciones llamando a este servicio.
+Revisa si el estado de una orden es PAYMENT_DEFINED para realizar una notificación por e-mail.
+La recomendación es una lista de artículos asociados al artículo del cual se obtuvo dicha recomendación.
+Si un articulo dentro de la lista es comprado, su puntaje se establece en 0.
 
 # APIDOC
 
-## Resource: Collection
-
-### SetCollection
+## GetRanking
 
 *Route*
 
-    POST /v1/recomm/collection
----
-*Body*
-```js
-{
-    collectionName: "{Collection Name}",
-    articles: [
-        id: "{Article Id}",
-        ....
-    ]
-}
-```
+GET /v1/recommendation/ranking
 ---
 *Response*
 ```js
 {
-    _id: "{Collection Id}",
-    articles: ["{Articles Id}",...],
-    enabled: true|false,
-    created: "{Creation date}",
-    update: "{Last update date}"
+articles: [
+	{
+	_id: “{article id}”,
+	rank: “ranking number”
+	}
+]
+}
+```
+---
+
+*Error Response*
+
+HTTP/1.1 400 Bad Request
+```js
+{
+error:{
+message: "{Motivo del error}",
+path: "{Nombre de la propiedad}"
+}
+}
+```
+---
+HTTP/1.1 500 Internal Server Error
+```js
+{
+error: "Not found"
+}
+```
+
+## GetRecommendations
+
+*Route*
+
+GET /v1/recommendation
+---
+*Response*
+```js
+{
+articles: [“{articles}”], //es el json devuelto por catalog
+precision:  “{precision number}”
 }
 ```
 ---
 *Error Response*
 
-    HTTP/1.1 400 Bad Request
+HTTP/1.1 400 Bad Request
 ```js
 {
-    error:{
-        message: "{Motivo del error}",
-        path: "{Nombre de la propiedad}"
-    }
+error:{
+message: "{Motivo del error}",
+path: "{Nombre de la propiedad}"
+}
 }
 ```
 ---
-    HTTP/1.1 500 Internal Server Error
+HTTP/1.1 500 Internal Server Error
 ```js
 {
-    error: "Not found"
+error: "Not found"
 }
 ```
 
-### GetCollection
-
-*Route*
-
-    GET /v1/recomm/collection/:collection_id
----
-*Response*
-```js
-{
-    _id: "{Collection Id}",
-    articles: ["{Articles Id}",...],
-    enabled: true|false,
-    created: "{Creation date}",
-    update: "{Last update date}"
-}
-```
----
-*Error Response*
-
-    HTTP/1.1 400 Bad Request
-```js
-{
-    error:{
-        message: "{Motivo del error}",
-        path: "{Nombre de la propiedad}"
-    }
-}
-```
----
-    HTTP/1.1 500 Internal Server Error
-```js
-{
-    error: "Not found"
-}
-```
-
-## Resource: Recommendation
-
-### GetRandomRecommendation / GetAllRecommendations
-
-*Route*
-
-    GET /v1/recomm/random
-    GET /v1/recomm/all
----
-*Response*
-```js
-{
-    articles: "{Articles Id}" /*solo un artículo al azar*/,
-    collection: "{Collection Id}"
-}
-```
-```js
-{
-    articles: ["{Articles Id}",...] /*todos los artículos de la colección menos con el que se busco la colección*/,
-    collection: "{Collection Id}"
-}
-```
----
-*Error Response*
-
-    HTTP/1.1 400 Bad Request
-```js
-{
-    error:{
-        message: "{Motivo del error}",
-        path: "{Nombre de la propiedad}"
-    }
-}
-```
----
-    HTTP/1.1 500 Internal Server Error
-```js
-{
-    error: "Not found"
-}
-```

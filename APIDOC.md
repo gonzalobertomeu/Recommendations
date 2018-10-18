@@ -33,7 +33,7 @@ Cada item del ranking, es la suma de todos los puntajes por usuario, de cada art
 *Body*
 ```js
 {
-	limit: "{default 0}" //cantidad de items del ranking
+ limit: "{default 0}" //cantidad de items del ranking
 }
 ```
 
@@ -41,13 +41,13 @@ Cada item del ranking, es la suma de todos los puntajes por usuario, de cada art
 *Response*
 ```js
 {
-articles: [
-	{
-		_id: "{article id}",
-		rank: "{ranking number}",
-		score: "{score}"
-	}, ...
-	]
+ articles: [
+  {
+   _id: "{article id}",
+   rank: "{ranking number}",
+   score: "{score}"
+  }, ...
+ ]
 }
 ```
 ---
@@ -57,10 +57,10 @@ articles: [
 HTTP/1.1 400 Bad Request
 ```js
 {
-error:{
-message: "{Motivo del error}",
-path: "{Nombre de la propiedad}"
-}
+ error:{
+  message: "{Motivo del error}",
+  path: "{Nombre de la propiedad}"
+ }
 }
 ```
 
@@ -69,24 +69,24 @@ HTTP/1.1 400 Bad Request
 
 ```js
 {
-error:{
-message: "{Motivo del error}",
-path: "{Nombre de la propiedad}"
-}
+ error:{
+  message: "{Motivo del error}",
+  path: "{Nombre de la propiedad}"
+ }
 }
 ```
 ---
 HTTP/1.1 401 Unauthorized
 ```js
 {
-error: "Unauthorized"
+ error: "Unauthorized"
 }
 ```
 ---
 HTTP/1.1 500 Internal Server Error
 ```js
 {
-error: "Not found"
+ error: "Not found"
 }
 ```
 
@@ -100,8 +100,8 @@ Da como resultado una lista de articulos recomendados para el usuario que realiz
 *Response*
 ```js
 {
-articles: ["{articles}"], /*es el json devuelto por catalog*/
-precision:  "{precision number}"
+ articles: ["{articles}"], /*es el json devuelto por catalog*/
+ precision:  "{precision number}"
 }
 ```
 ---
@@ -110,14 +110,14 @@ precision:  "{precision number}"
 HTTP/1.1 401 Unauthorized
 ```js
 {
-error: "Unauthorized"
+ error: "Unauthorized"
 }
 ```
 ---
 HTTP/1.1 500 Internal Server Error
 ```js
 {
-error: "Not found"
+ error: "Not found"
 }
 ```
 
@@ -134,12 +134,12 @@ Cada vez que un articulo es validado por catalog, aumenta su puntaje.
 *Example*
 ```js
 {
-"type": "article-exist",
-"message" : {
-    "cartId": "{cartId}",
-    "articleId": "{articleId}",
-    "valid": true|false
-   }
+ "type": "article-exist",
+ "message" : {
+  "cartId": "{cartId}",
+  "articleId": "{articleId}",
+  "valid": true|false
+ }
 }
 ```
 
@@ -152,15 +152,15 @@ Cada vez que se haga un place de order, se aumenta el puntaje de cada artículo 
 
 ```js
 {
-"type": "order-placed",
-"message" : {
-    "cartId": "{cartId}",
-    "orderId": "{orderId}"
-    "articles": [{
-         "articleId": "{article id}"
-         "quantity" : "{quantity}"
-     }, ...]
-   }
+ "type": "order-placed",
+ "message" : {
+  "cartId": "{cartId}",
+  "orderId": "{orderId}"
+   "articles": [{
+    "articleId": "{article id}"
+    "quantity" : "{quantity}"
+    }, ...]
+  }
 }
 ```
 ---
@@ -179,14 +179,13 @@ Cola util para marketing, stats, o para la UI de este e-commerce.
   "message": {
    "articles":[
     {
-	 "_id":"article id",
-	 "score": "{score}"
+     "_id":"article id",
+     "score": "{score}"
 	}, ...
    ]
   }
 }
 ```
-
 
 # Anexo: Descripción Técnica
 La precisión se calcula según esta formula:

@@ -15,7 +15,7 @@ Mientras más cerca de 1, más precisa es la recomendación que se realizará.
 Puede obtener en cualquier momento artículos recomendados. Si el cliente confirma una compra [order_placed], el microservicio enviara un mail con los artículos recomendados automáticamente, y establecerá el puntaje de ese artículo en 0. Si se vuelve a buscar ese mismo artículo, su puntaje aumentará y al cabo de un tiempo puede ser nuevamente recomendado.
 
 ## Casos de uso
-
+ 
 Escucha a la cola “article-commend”. Los mensajes recibidos tienen un id de articulo y una puntuación según de que evento surge el “elogio” a ese articulo (Buscarlo, agregarlo al carrito o comprarlo).
 Recommendations se encarga de mantener un ranking de artículos por cada usuario.
 Se puede solicitar recomendaciones llamando a este servicio.

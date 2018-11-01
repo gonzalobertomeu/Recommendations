@@ -1,0 +1,25 @@
+{
+  "name": "recomm_node",
+  "version": "0.0.1",
+  "description": "Microservicio parte de ecommerce",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gonzalobertomeu/Recommendatios.git"
+  },
+  "author": "Gonzalo Bertomeu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gonzalobertomeu/Recommendatios/issues"
+  },
+  "homepage": "https://github.com/gonzalobertomeu/Recommendatios#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.8",
+    "nodemon": "^1.18.5"
+  }
+}

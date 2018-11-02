@@ -4,13 +4,14 @@ import * as express from "express";
 
 let server = express();
 
-server.listen(3000,()=>{
-    console.log("escuchando en 3000");
+server.get("/foo",function(req,res){
+    console.log("Peticion por /foo");
+    res.status(200).send({
+        Hola:"Mundo"
+    });
 });
 
-server.get("/foo",(req,res)=>{
-    console.log("Respondiendo mensaje");
-    res.status(200).send({
-        hello:"Wolrd"
-    });
-})
+
+server.listen(3000,()=>{
+    console.log("Escuchando en puerto 3000");
+});

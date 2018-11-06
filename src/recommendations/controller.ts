@@ -2,7 +2,7 @@
 
 import { Recommendation, IRecommendation } from "./schema";
 
-interface RecommendationRequest {
+export interface RecommendationRequest {
     user?: String,
     articles?: Number,
 }

@@ -2,6 +2,7 @@
 
 import * as express from "./utils/express.factory";
 import * as mongoose from "mongoose";
+import * as rabbitRecommendation from './rabbit/rabbit';
 
 
 mongoose.connect('mongodb://mongodb/test',function(err: any){
@@ -10,7 +11,9 @@ mongoose.connect('mongodb://mongodb/test',function(err: any){
     } else {
         console.log("Mongo conectado");
     }
-})
+});
+
+rabbitRecommendation.init();
 
 let server = express.init();
 

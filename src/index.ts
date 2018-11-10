@@ -3,9 +3,12 @@
 import * as express from "./utils/express.factory";
 import * as mongoose from "mongoose";
 import * as rabbitRecommendation from './rabbit/rabbit';
+import { getConfig, Config } from "./utils/configs";
 
+let config: Config = getConfig(process.env);
+console.log(config);
 
-mongoose.connect('mongodb://db/test',function(err: any){
+mongoose.connect(`mongodb://${config.mongo}/test`,function(err: any){
     if (err) {
         console.error("No se pudo conectar a mongo");
     } else {
@@ -15,8 +18,8 @@ mongoose.connect('mongodb://db/test',function(err: any){
 
 rabbitRecommendation.init();
 
-let server = express.init();
+let server = express.init(config);
 
-server.listen(3000,()=>{
+server.listen(config.port,()=>{
     console.log("Escuchando en puerto 3000");
 });

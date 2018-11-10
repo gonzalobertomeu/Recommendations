@@ -2,11 +2,18 @@
 
 import * as amqp from 'amqplib';
 
+import { Config, getConfig } from "../utils/configs";
+
+
 export class RabbitDirectConsumer {
+    config: Config;
 
     constructor(private queue: string, private exchange:string){
         console.log(`Creando consumer para cola ${queue} y exchange ${exchange}`);
+        this.config = getConfig(process.env)
     }
+
+
     processors = new Map<string,Function>();
 
     addProcessor(type:string,processor:Function){
@@ -16,7 +23,7 @@ export class RabbitDirectConsumer {
     async init() {
         try{
 
-            const conn = await amqp.connect("amqp://rmq");
+            const conn = await amqp.connect(`amqp://${this.config.rabbit}`);
             const channel = await conn.createChannel();
 
             channel.on("close",function(self:RabbitDirectConsumer){

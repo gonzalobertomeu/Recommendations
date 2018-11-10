@@ -5,7 +5,7 @@ import * as mongoose from "mongoose";
 import * as rabbitRecommendation from './rabbit/rabbit';
 
 
-mongoose.connect('mongodb://mongodb/test',function(err: any){
+mongoose.connect('mongodb://db/test',function(err: any){
     if (err) {
         console.error("No se pudo conectar a mongo");
     } else {

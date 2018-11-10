@@ -1,0 +1,32 @@
+version: "3.2"
+services:
+  rmq:
+    image: rabbitmq:latest
+    networks:
+    - ecommerce
+
+  db:
+    image: mongo:latest
+    networks: 
+    - ecommerce
+
+  recommendations:
+    image: node:latest
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    networks: 
+      - ecommerce
+    depends_on: 
+      - rmq
+      - db
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    command: npm run dev
+
+networks: 
+  ecommerce:
+  
+  

@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   rmq:
-    image: rabbitmq:latest
+    image: rabbitmq:management
     networks:
     - ecommerce
 

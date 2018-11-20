@@ -38,14 +38,16 @@ export class RabbitDirectConsumer {
             const exchange = await channel.assertExchange(this.exchange,"direct",{durable:false});
             const queue = await channel.assertQueue(this.queue,{durable:false});
 
-            channel.bindQueue(queue.queue,exchange.exchange,queue.queue);
+            channel.bindQueue(queue.queue,exchange.exchange,exchange.exchange);
             channel.consume(queue.queue, (message)=>{
                 if(message){
                     const rabbitmensaje: IRabbitMessage = JSON.parse(message.content.toString());
+                    const id:any = message.properties.headers.id;
+                    console.log(id);
                     if(this.processors.has(rabbitmensaje.type)){
                         const handler = this.processors.get(rabbitmensaje.type);
-                        if(handler) {
-                            handler(rabbitmensaje);
+                        if(handler && id) {
+                            handler(rabbitmensaje,id);
                         }   
                     }
                 }

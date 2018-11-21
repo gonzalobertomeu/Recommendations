@@ -1,6 +1,7 @@
 'use strict'
 
 import * as amqp from 'amqplib';
+import { IRabbitMessage,RabbitProcessor } from "./common";
 
 import { Config, getConfig } from "../utils/configs";
 
@@ -58,15 +59,4 @@ export class RabbitDirectConsumer {
             setTimeout(()=> this.init(),10000)
         }
     }
-}
-
-export interface IRabbitMessage {
-    type:string;
-    exchange?:string;
-    queue?:string;
-    message:any;
-}
-
-export interface RabbitProcessor {
-    (source: IRabbitMessage): void;
 }

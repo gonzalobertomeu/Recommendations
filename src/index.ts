@@ -8,7 +8,7 @@ import { getConfig, Config } from "./utils/configs";
 let config: Config = getConfig(process.env);
 console.log(config);
 
-mongoose.connect(`mongodb://${config.mongo}/test`,function(err: any){
+mongoose.connect(`mongodb://${config.mongo}/ranking`,function(err: any){
     if (err) {
         console.error("No se pudo conectar a mongo");
     } else {

@@ -12,10 +12,9 @@ Si un artículo es comprado, se envia automáticamente un mail con las recomenda
 
 ## Casos de uso
  
-+ Escucha a la cola "article-commend". Los mensajes recibidos tienen un id de articulo y una puntuación según de que evento surge el "elogio" a ese articulo (Buscarlo, agregarlo al carrito o comprarlo).
++ Escucha a la cola "article-exist". Los mensajes recibidos tienen un id de articulo y una puntuación según de que evento surge el "elogio" a ese articulo (Buscarlo, agregarlo al carrito o comprarlo).
 + Recommendations se encarga de mantener un ranking de artículos por cada usuario.
 + Se puede solicitar recomendaciones llamando a este servicio.
-+ Revisa si el estado de una orden es PAYMENT_DEFINED para realizar una notificación por e-mail.
 + La recomendación es una lista de artículos asociados al artículo del cual se obtuvo dicha recomendación.
 + Si un articulo dentro de la lista es comprado, su puntaje se establece en 0.
 

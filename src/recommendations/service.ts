@@ -6,9 +6,9 @@ import * as recommendation from "./controller";
 
 export function init(router: Router){
     
-    router.route("/")
+   /*  router.route("/")
         .post(setRecommendation)
-        .get(getRecommendations);
+        .get(getRecommendations); */
 
 }
 

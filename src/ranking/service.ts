@@ -52,7 +52,18 @@ async function getRecommendation(req: Request, res: Response){
 
         console.log(recommendations);
 
-        res.status(200).send(recommendations);
+        const retorno = {
+            user: userId,
+            articles: recommendations.map((element)=>{
+                const obj = {
+                    article: element.article,
+                    score: element.score
+                }
+                return obj;
+            })
+        }
+
+        res.status(200).send(retorno);
     } catch (error) {
         handleError(res,error);
     }

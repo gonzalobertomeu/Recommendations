@@ -1,6 +1,7 @@
 'use strict'
 
-import { RabbitDirectConsumer, IRabbitMessage, RabbitProcessor } from "./directConsumer";
+import { RabbitDirectConsumer } from "./directConsumer";
+import { IRabbitMessage,RabbitProcessor } from "./common";
 import { setRecommendation,RecommendationRequest } from "../recommendations/controller";
 import { scorePoint } from "../ranking/controller";
 import { IRanking } from "../ranking/schema";
